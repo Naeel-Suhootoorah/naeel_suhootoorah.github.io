@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chatbot</title>
+<style>
+
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        background: linear-gradient(to right, #2980b9, #6dd5fa, #ffffff);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    #chatbot-container {
+        width: 400px;
+        background-color: #fff;
+        border-radius: 15px;
+        overflow-y: scroll; /* Enable vertical scrolling */
+        max-height: 500px; /* Set max height to enable scrolling */
+        box-shadow: 0px 0px 30px rgba(0,0,0,0.2);
+        padding: 20px;
+        border: 2px solid #2980b9;
+    }
+
+    #chatbot-container::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    #chatbot-container::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+
+    #chatbot-container::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 5px;
+    }
+
+    #chatbot-header {
+        background-color: #2980b9;
+        color: #fff;
+        padding: 15px;
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
+        font-weight: bold;
+        font-size: 20px;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    #chatbot-messages {
+        padding: 20px;
+    }
+
+    #chatbot-messages p {
+        margin-bottom: 10px;
+        font-size: 16px;
+    }
+
+    #chatbot-messages ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    #chatbot-messages ul li {
+        margin-bottom: 10px;
+        padding: 15px;
+        background-color: #f0f0f0;
+        border-radius: 20px;
+        box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+        font-size: 16px;
+    }
+
+    #chatbot-messages ul li a {
+        color: #2980b9;
+        text-decoration: none;
+    }
+
+    #chatbot-messages ul li a:hover {
+        text-decoration: underline;
+    }
+
+    input[type="text"] {
+        width: calc(100% - 70px);
+        padding: 15px;
+        border: 2px solid #2980b9;
+        border-radius: 10px;
+        margin-right: 10px;
+        font-size: 16px;
+        outline: none;
+    }
+
+    button {
+        background-color: #2980b9;
+        color: #fff;
+        border: none;
+        padding: 15px 30px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s ease;
+        outline: none;
+    }
+
+    button:hover {
+        background-color: #2471a3;
+    }
+
+    /* Hide submit container when user's name is submitted */
+    #submit-container {
+        display: block;
+    }
+
+    #submit-container.hide {
+        display: none;
+    }
+    
+    #chatbot-container {
+        width: 400px;
+        background-color: #fff;
+        border-radius: 15px;
+        overflow-y: auto; /* Change to auto to only show scrollbar when necessary */
+        max-height: 500px; /* Set max height to enable scrolling */
+        box-shadow: 0px 0px 30px rgba(0,0,0,0.2);
+        padding: 20px;
+        border: 2px solid #2980b9;
+    }
+
+    /* Remove scrollbar styling */
+    #chatbot-container::-webkit-scrollbar {
+        display: none;
+    }
+
+</style>
+</head>
+<body>
+
+<div id="chatbot-container">
+    <div id="chatbot-header">Chatbot</div>
+    <div id="chatbot-messages">
+        <div id="submit-container">
+            <p style="margin-bottom: 15px;">Hi there! What's your name?</p>
+            <input type="text" id="user-name" placeholder="Enter your name">
+            <button onclick="submitName()" style="margin-top: 20px;">Submit</button>
+        </div>
+    </div>
+</div>
+
+<script>
+var chatbotVisible = false;
+var userName = null;
+
+function toggleChatbot() {
+    var chatbotContainer = document.getElementById("chatbot-container");
+    chatbotVisible = !chatbotVisible;
+
+    if (chatbotVisible) {
+        chatbotContainer.classList.add("show");
+    } else {
+        chatbotContainer.classList.remove("show");
+    }
+}
+
+function submitName() {
+    var userNameInput = document.getElementById("user-name").value.trim();
+    if (userNameInput === "") {
+        alert("Please enter your name.");
+        return;
+    }
+    userName = userNameInput;
+
+    var chatbotMessages = document.getElementById("chatbot-messages");
+
+    // Display welcome message with user's name
+    var welcomeMessage = document.createElement("p");
+    welcomeMessage.textContent = "Hi " + userName + "! Welcome to the chatbot. I am here to guide you through the following questions:";
+    chatbotMessages.appendChild(welcomeMessage);
+
+    // Display the questions
+    var questionsList = document.createElement("ul");
+
+    var question1 = document.createElement("li");
+    var question1Link = document.createElement("a");
+    question1Link.href = "#";
+    question1Link.textContent = "How much people still lack safe and clean drinking water?";
+    question1Link.onclick = function() { fetchAnswer('question1'); };
+    question1.appendChild(question1Link);
+    questionsList.appendChild(question1);
+
+    var question2 = document.createElement("li");
+    var question2Link = document.createElement("a");
+    question2Link.href = "#";
+    question2Link.textContent = "Why is water an urgent issue and why should I care about it?";
+    question2Link.onclick = function() { fetchAnswer('question2'); };
+    question2.appendChild(question2Link);
+    questionsList.appendChild(question2);
+
+    var question3 = document.createElement("li");
+    var question3Link = document.createElement("a");
+    question3Link.href = "#";
+    question3Link.textContent = "How many people die due to diseases directly attributed to unsafe water?";
+    question3Link.onclick = function() { fetchAnswer('question3'); };
+    question3.appendChild(question3Link);
+    questionsList.appendChild(question3);
+
+    chatbotMessages.appendChild(questionsList);
+
+    // Hide submit container after name is submitted
+    var submitContainer = document.getElementById("submit-container");
+    submitContainer.classList.add("hide");
+
+    // Clear input field
+    document.getElementById("user-name").value = "";
+
+    // Scroll to bottom of chat
+    chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+}
+
+function fetchAnswer(question) {
+    var chatbotMessages = document.getElementById("chatbot-messages");
+    var answer;
+
+    // Simulate fetching answer from website
+    switch (question) {
+        case "question1":
+            answer = "2.2 billion people still lack safely managed drinking water.";
+            break;
+        case "question2":
+            answer = "Water is fundamental to everyone. It is essential for human health and well-being. But decades of poor management have intensified water stress and degraded water-related ecosystems. This leads to negative impacts on human health. The availability of safely managed drinking water, sanitation, and hygiene can help reduce the spread of diseases and improve health of populations. Yet, billions of people around the world still lack access to these basic services. Urgent action is needed to ensure a sustainable and equitable distribution of water for all needs.";
+            break;
+        case "question3":
+            answer = "More than 800,000 people die each year from diseases directly attributed to unsafe water, inadequate sanitation, and poor hygiene practices. Water is a critical issue that affects everyone. ";
+            break;
+        default:
+            answer = "Sorry, I couldn't find the answer.";
+    }
+
+    // Display the answer in a paragraph
+    var answerParagraph = document.createElement("p");
+    answerParagraph.textContent = answer;
+    chatbotMessages.appendChild(answerParagraph);
+
+    // Scroll to the bottom of chat messages
+    chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+}
+</script>
+
+</body>
+</html>
